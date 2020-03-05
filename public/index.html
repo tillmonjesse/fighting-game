@@ -6,6 +6,8 @@
 <body>
 
     <script>
+    var logo;
+    var cursors;
     var config = {
         type: Phaser.AUTO,
         width: 800,
@@ -18,7 +20,8 @@
         },
         scene: {
             preload: preload,
-            create: create
+            create: create,
+            update: update
         }
     };
 
@@ -26,16 +29,17 @@
 
     function preload ()
     {
-        this.load.setBaseURL('http://labs.phaser.io');
+       // this.load.setBaseURL('http://labs.phaser.io');
 
-        this.load.image('sky', 'assets/skies/space3.png');
-        this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-        this.load.image('red', 'assets/particles/red.png');
+        this.load.image('sky', 'assets/space3.png');
+        this.load.image('logo', 'assets/original.png');
+        this.load.image('red', 'assets/red.png');
     }
 
     function create ()
     {
         this.add.image(400, 300, 'sky');
+        cursors = this.input.keyboard.createCursorKeys();
 
         var particles = this.add.particles('red');
 
@@ -45,13 +49,36 @@
             blendMode: 'ADD'
         });
 
-        var logo = this.physics.add.image(400, 100, 'logo');
+        logo = this.physics.add.image(400, 100, 'logo');
 
         logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
+        
         logo.setCollideWorldBounds(true);
 
         emitter.startFollow(logo);
+    }
+    function update ()
+    {
+        logo.setBounce(1, 1);
+       // logo.setVelocity(0);
+
+        if (cursors.left.isDown)
+        {
+            logo.setVelocityX(-300);
+        }
+        else if (cursors.right.isDown)
+        {
+            logo.setVelocityX(300);
+        }
+
+        if (cursors.up.isDown)
+        {
+            logo.setVelocityY(-300);
+        }
+        else if (cursors.down.isDown)
+        {
+            logo.setVelocityY(300);
+        }
     }
     </script>
 
