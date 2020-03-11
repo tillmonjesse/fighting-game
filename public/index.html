@@ -38,6 +38,7 @@
         this.load.image('logo', 'assets/original.png');
         this.load.image('red', 'assets/red.png');
         this.load.image('ground', 'assets/ground.png');
+        this.load.image('enemy', 'assets/enemy.png')
     }
 
     function create ()
@@ -55,15 +56,25 @@
             scale: { start: 1, end: 0 },
             blendMode: 'ADD'
         });
-        logo = this.physics.add.image(WIDTH/2, HEIGHT/2, 'logo');
+        logo = this.physics.add.image(0, 0, 'logo');
         logo.setDragX(.95);
         logo.setDamping(true);
         logo.setMaxVelocity(200);
+        logo.setMass(5);
+        logo.setBounce(.8);
 
+        enemy = this.physics.add.image(WIDTH/2, HEIGHT/2, 'enemy');
+        enemy.setDragX(.95);
+        enemy.setDamping(true);
+        enemy.setMaxVelocity(200);
+        enemy.setBounce(.8);
 
         
         logo.setCollideWorldBounds(true);
+        enemy.setCollideWorldBounds(true);
         this.physics.add.collider(logo, platforms);
+        this.physics.add.collider(enemy, platforms);
+        this.physics.add.collider(logo, enemy);
         emitter.startFollow(logo);
     }
     function update ()

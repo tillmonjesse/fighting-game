@@ -21,3 +21,11 @@
 	- when setting the controls for up the character must be touching the ground and having a negative velocity as the value to the movement
 - when in the air if you press down the player character will come down to the ground faster
 	- adding negative velocity to the down key
+
+## NPC
+
+- Will add both enemies and friendly NPC's
+ - enemies will be able to cause damage to the player with different degrees of attacks. All of the attacts will stun or push the player back. The lighter the attack the less amount of time the palayer will have to react and the harder the attack there will be a longer wind up time.
+ - friendly NPC's won't attack or respond to player attacks. They will either have dialog or sell the the player helpful items
+ 	- enemies will be objects that can collide with the player. The player and the enemies will have mass that will beable to push the player with enough speed and vice versa
+ 	- 
