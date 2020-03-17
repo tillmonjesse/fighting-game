@@ -12,6 +12,9 @@
     var logo;
     var cursors;
     var platforms;
+    var punch;
+    var circle;
+    var graphics;
     var config = {
         type: Phaser.AUTO,
         width: WIDTH,
@@ -39,10 +42,17 @@
         this.load.image('red', 'assets/red.png');
         this.load.image('ground', 'assets/ground.png');
         this.load.image('enemy', 'assets/enemy.png')
+        this.load.image('punch', 'assets/punch.png')
     }
 
     function create ()
     {
+        punchRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        punchLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        punchUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        punchDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        energyBall = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
         this.add.image(WIDTH/2, HEIGHT/2, 'sky');
         cursors = this.input.keyboard.createCursorKeys();
         platforms = this.physics.add.staticGroup();
@@ -69,12 +79,28 @@
         enemy.setMaxVelocity(200);
         enemy.setBounce(.8);
 
+        punch = this.physics.add.image(logo.x + 50, logo.y, 'punch');
+        punch.setMass(5);
+        punch.setBounce(.8);
+
+        circle = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000);
+
+        /*graphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
+        graphics.fillCircleShape(circle);*/
         
         logo.setCollideWorldBounds(true);
         enemy.setCollideWorldBounds(true);
         this.physics.add.collider(logo, platforms);
         this.physics.add.collider(enemy, platforms);
         this.physics.add.collider(logo, enemy);
+        this.physics.add.collider(punch, enemy, function (punch, enemy)
+        {
+            console.log('hit');
+        });
+        /*this.physics.add.collider(circle, enemy, function (circle, enemy)
+        {
+            console.log('hit');
+        });*/
         emitter.startFollow(logo);
     }
     function update ()
@@ -102,6 +128,34 @@
         else
         {
             logo.setAccelerationY(0);
+        }
+        if (punchRight.isDown) 
+        {
+            punch.setPosition(logo.x + 50, logo.y);
+        }
+        else if (punchLeft.isDown)
+        {
+            punch.setPosition(logo.x + -50, logo.y);
+        }
+        else if (punchUp.isDown) 
+        {
+            punch.setPosition(logo.x, logo.y + -50);
+        }
+        else if (punchDown.isDown) 
+        {
+            punch.setPosition(logo.x, logo.y + 50);
+        }
+        else 
+        {
+            punch.setPosition(WIDTH + 100, HEIGHT + 100);
+        }
+        if (energyBall.isDown)
+        {
+            circle.setPosition(WIDTH/2, HEIGHT/2);
+        }
+        else 
+        {
+            circle.setPosition(WIDTH + 300, HEIGHT + 300);
         }
     }
     </script>

@@ -28,4 +28,9 @@
  - enemies will be able to cause damage to the player with different degrees of attacks. All of the attacts will stun or push the player back. The lighter the attack the less amount of time the palayer will have to react and the harder the attack there will be a longer wind up time.
  - friendly NPC's won't attack or respond to player attacks. They will either have dialog or sell the the player helpful items
  	- enemies will be objects that can collide with the player. The player and the enemies will have mass that will beable to push the player with enough speed and vice versa
- 	- 
+
+ ## Combat 
+
+ - direction for attacks
+ 	- pressing a key in a direction will cause an attack in that direction
+ 		- to have an object be created with a key push and use the collision of the other object will decide if that hits
