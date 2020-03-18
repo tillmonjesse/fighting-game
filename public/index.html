@@ -13,7 +13,6 @@
     var cursors;
     var platforms;
     var punch;
-    var circle;
     var graphics;
     var config = {
         type: Phaser.AUTO,
@@ -42,7 +41,6 @@
         this.load.image('red', 'assets/red.png');
         this.load.image('ground', 'assets/ground.png');
         this.load.image('enemy', 'assets/enemy.png')
-        this.load.image('punch', 'assets/punch.png')
     }
 
     function create ()
@@ -79,28 +77,25 @@
         enemy.setMaxVelocity(200);
         enemy.setBounce(.8);
 
-        punch = this.physics.add.image(logo.x + 50, logo.y, 'punch');
-        punch.setMass(5);
-        punch.setBounce(.8);
+        punch = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000, 0);
 
-        circle = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000);
+        this.physics.add.existing(punch);
 
-        /*graphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
-        graphics.fillCircleShape(circle);*/
+        punch.body.setAllowDrag(false);
+        punch.body.setAllowGravity(false);
+        punch.body.setAllowRotation(false);
+        punch.body.setMaxVelocity(0);
         
         logo.setCollideWorldBounds(true);
         enemy.setCollideWorldBounds(true);
         this.physics.add.collider(logo, platforms);
         this.physics.add.collider(enemy, platforms);
         this.physics.add.collider(logo, enemy);
-        this.physics.add.collider(punch, enemy, function (punch, enemy)
+        this.physics.add.overlap(punch, enemy, function (punch, enemy)
         {
             console.log('hit');
         });
-        /*this.physics.add.collider(circle, enemy, function (circle, enemy)
-        {
-            console.log('hit');
-        });*/
+
         emitter.startFollow(logo);
     }
     function update ()
@@ -148,14 +143,6 @@
         else 
         {
             punch.setPosition(WIDTH + 100, HEIGHT + 100);
-        }
-        if (energyBall.isDown)
-        {
-            circle.setPosition(WIDTH/2, HEIGHT/2);
-        }
-        else 
-        {
-            circle.setPosition(WIDTH + 300, HEIGHT + 300);
         }
     }
     </script>

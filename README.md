@@ -29,7 +29,7 @@
  - friendly NPC's won't attack or respond to player attacks. They will either have dialog or sell the the player helpful items
  	- enemies will be objects that can collide with the player. The player and the enemies will have mass that will beable to push the player with enough speed and vice versa
 
- ## Combat 
+## Combat 
 
  - direction for attacks
  	- pressing a key in a direction will cause an attack in that direction
