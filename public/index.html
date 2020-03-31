@@ -14,6 +14,10 @@
     var platforms;
     var punch;
     var graphics;
+    var attack = {
+        buttonDown: 0,
+        sinceFirstPressed: 0
+    };
     var config = {
         type: Phaser.AUTO,
         width: WIDTH,
@@ -77,7 +81,7 @@
         enemy.setMaxVelocity(200);
         enemy.setBounce(.8);
 
-        punch = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000, 0);
+        punch = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000, 1);
 
         this.physics.add.existing(punch);
 
@@ -126,7 +130,22 @@
         }
         if (punchRight.isDown) 
         {
-            punch.setPosition(logo.x + 50, logo.y);
+            attack.buttonDown++;
+            attack.sinceFirstPressed++;
+        }
+        else if (punchRight.isUp && attack.buttonDown > 0) 
+        {
+            attack.sinceFirstPressed++;
+            if (attack.sinceFirstPressed > 7.5 && attack.sinceFirstPressed < 15 + 7.5)
+            {
+                punch.setPosition(logo.x + 50, logo.y);
+            }
+            else if (attack.sinceFirstPressed > 22.5)
+            {
+                attack.buttonDown = 0;
+                attack.sinceFirstPressed = 0;
+                punch.setPosition(WIDTH + 100, HEIGHT + 100);
+            }
         }
         else if (punchLeft.isDown)
         {
@@ -143,6 +162,8 @@
         else 
         {
             punch.setPosition(WIDTH + 100, HEIGHT + 100);
+            attack.buttonDown = 0;
+            attack.sinceFirstPressed = 0;
         }
     }
     </script>
