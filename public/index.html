@@ -15,8 +15,7 @@
     var punch;
     var graphics;
     var attack = {
-        buttonDown: 0,
-        sinceFirstPressed: 0
+        animation: 0
     };
     var config = {
         type: Phaser.AUTO,
@@ -50,10 +49,13 @@
     function create ()
     {
         punchRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        punchRight.sinceFirstPressed = 0;
         punchLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        punchLeft.sinceFirstPressed = 0;
         punchUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        punchUp.sinceFirstPressed = 0;
         punchDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        energyBall = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        punchDown.sinceFirstPressed = 0;
 
         this.add.image(WIDTH/2, HEIGHT/2, 'sky');
         cursors = this.input.keyboard.createCursorKeys();
@@ -130,40 +132,135 @@
         }
         if (punchRight.isDown) 
         {
-            attack.buttonDown++;
-            attack.sinceFirstPressed++;
+            punchRight.sinceFirstPressed++;
         }
-        else if (punchRight.isUp && attack.buttonDown > 0) 
+        else if (punchRight.isUp && punchRight.sinceFirstPressed > 0) 
         {
-            attack.sinceFirstPressed++;
-            if (attack.sinceFirstPressed > 7.5 && attack.sinceFirstPressed < 15 + 7.5)
+            punchRight.sinceFirstPressed++;
+            if (punchRight.sinceFirstPressed > 7.5 && punchRight.sinceFirstPressed <= 30)
             {
                 punch.setPosition(logo.x + 50, logo.y);
+                attack.animation++;
+                if (attack.animation > 10) 
+                {
+                    punchRight.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('light attack finished');
+                }
             }
-            else if (attack.sinceFirstPressed > 22.5)
+            else if (punchRight.sinceFirstPressed > 30)
             {
-                attack.buttonDown = 0;
-                attack.sinceFirstPressed = 0;
-                punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                punch.setPosition(logo.x + 50, logo.y);
+                attack.animation++;
+                if (attack.animation > 30)
+                {
+                    punchRight.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('heavy attack finished');
+                }
+
             }
         }
         else if (punchLeft.isDown)
+         {
+            punchLeft.sinceFirstPressed++;
+        }
+        else if (punchLeft.isUp && punchLeft.sinceFirstPressed > 0) 
         {
-            punch.setPosition(logo.x + -50, logo.y);
+            punchLeft.sinceFirstPressed++;
+            if (punchLeft.sinceFirstPressed > 7.5 && punchLeft.sinceFirstPressed <= 30)
+            {
+                punch.setPosition(logo.x + -50, logo.y);
+                attack.animation++;
+                if (attack.animation > 10) 
+                {
+                    punchLeft.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('light attack finished');
+                }
+            }
+            else if (punchLeft.sinceFirstPressed > 30)
+            {
+                punch.setPosition(logo.x + -50, logo.y);
+                attack.animation++;
+                if (attack.animation > 30)
+                {
+                    punchLeft.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('heavy attack finished');
+                }
+
+            }
         }
         else if (punchUp.isDown) 
         {
-            punch.setPosition(logo.x, logo.y + -50);
+            punchUp.sinceFirstPressed++;
+        }
+        else if (punchUp.isUp && punchUp.sinceFirstPressed > 0) 
+        {
+            punchUp.sinceFirstPressed++;
+            if (punchUp.sinceFirstPressed > 7.5 && punchUp.sinceFirstPressed <= 30)
+            {
+                punch.setPosition(logo.x, logo.y + -50);
+                attack.animation++;
+                if (attack.animation > 10) 
+                {
+                    punchUp.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('light attack finished');
+                }
+            }
+            else if (punchUp.sinceFirstPressed > 30)
+            {
+                punch.setPosition(logo.x, logo.y + -50);
+                attack.animation++;
+                if (attack.animation > 30)
+                {
+                    punchUp.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('heavy attack finished');
+                }
+
+            }
         }
         else if (punchDown.isDown) 
         {
-            punch.setPosition(logo.x, logo.y + 50);
+            punchDown.sinceFirstPressed++;
         }
-        else 
+        else if (punchDown.isUp && punchDown.sinceFirstPressed > 0) 
         {
-            punch.setPosition(WIDTH + 100, HEIGHT + 100);
-            attack.buttonDown = 0;
-            attack.sinceFirstPressed = 0;
+            punchDown.sinceFirstPressed++;
+            if (punchDown.sinceFirstPressed > 7.5 && punchDown.sinceFirstPressed <= 30)
+            {
+                punch.setPosition(logo.x, logo.y + 50);
+                attack.animation++;
+                if (attack.animation > 10) 
+                {
+                    punchDown.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('light attack finished');
+                }
+            }
+            else if (punchDown.sinceFirstPressed > 30)
+            {
+                punch.setPosition(logo.x, logo.y + 50);
+                attack.animation++;
+                if (attack.animation > 30)
+                {
+                    punchDown.sinceFirstPressed = 0;
+                    attack.animation = 0;
+                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                    console.log('heavy attack finished');
+                }
+
+            }
         }
     }
     </script>
