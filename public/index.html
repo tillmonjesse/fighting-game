@@ -5,7 +5,20 @@
     </script>
 </head>
 <body>
-
+    <table>
+        <tr>
+            <td><div id="game"></div></td>
+            <td>
+                <div>
+                    <label for="gravity">Gravity</label>
+                    <input id="gravity" type="number" onChange="gravityChange(this)"/>
+                </div>
+                <div>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
     <script>
     var WIDTH = 800;
     var HEIGHT = 600;
@@ -14,6 +27,14 @@
     var platforms;
     var punch;
     var graphics;
+    var enemy;
+    var hit = {
+    	lightAttack: 7.5,
+    	heavyAttack: 30,
+    	lightDamage: 7.5,
+    	heavyDamage: 30,
+    	detected: 0
+    };
     var attack = {
         animation: 0
     };
@@ -31,8 +52,14 @@
             preload: preload,
             create: create,
             update: update
-        }
+        },
+        parent: 'game'
     };
+    document.getElementById('gravity').value = config.physics.arcade.gravity.y;
+    function gravityChange(input) {
+        console.log(input.valueAsNumber);
+        game.scene.scenes[0].physics.world.gravity.y = input.valueAsNumber;
+    }
 
     var game = new Phaser.Game(config);
 
@@ -82,6 +109,7 @@
         enemy.setDamping(true);
         enemy.setMaxVelocity(200);
         enemy.setBounce(.8);
+        enemy.health = 100;
 
         punch = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000, 1);
 
@@ -99,7 +127,7 @@
         this.physics.add.collider(logo, enemy);
         this.physics.add.overlap(punch, enemy, function (punch, enemy)
         {
-            console.log('hit');
+        	++hit.detected;
         });
 
         emitter.startFollow(logo);
@@ -136,31 +164,8 @@
         }
         else if (punchRight.isUp && punchRight.sinceFirstPressed > 0) 
         {
-            punchRight.sinceFirstPressed++;
-            if (punchRight.sinceFirstPressed > 7.5 && punchRight.sinceFirstPressed <= 30)
-            {
+            if (hitAnimation(punchRight, attack, logo, punch)) {
                 punch.setPosition(logo.x + 50, logo.y);
-                attack.animation++;
-                if (attack.animation > 10) 
-                {
-                    punchRight.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('light attack finished');
-                }
-            }
-            else if (punchRight.sinceFirstPressed > 30)
-            {
-                punch.setPosition(logo.x + 50, logo.y);
-                attack.animation++;
-                if (attack.animation > 30)
-                {
-                    punchRight.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('heavy attack finished');
-                }
-
             }
         }
         else if (punchLeft.isDown)
@@ -169,31 +174,8 @@
         }
         else if (punchLeft.isUp && punchLeft.sinceFirstPressed > 0) 
         {
-            punchLeft.sinceFirstPressed++;
-            if (punchLeft.sinceFirstPressed > 7.5 && punchLeft.sinceFirstPressed <= 30)
-            {
+            if (hitAnimation(punchLeft, attack, logo, punch)) {
                 punch.setPosition(logo.x + -50, logo.y);
-                attack.animation++;
-                if (attack.animation > 10) 
-                {
-                    punchLeft.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('light attack finished');
-                }
-            }
-            else if (punchLeft.sinceFirstPressed > 30)
-            {
-                punch.setPosition(logo.x + -50, logo.y);
-                attack.animation++;
-                if (attack.animation > 30)
-                {
-                    punchLeft.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('heavy attack finished');
-                }
-
             }
         }
         else if (punchUp.isDown) 
@@ -202,31 +184,8 @@
         }
         else if (punchUp.isUp && punchUp.sinceFirstPressed > 0) 
         {
-            punchUp.sinceFirstPressed++;
-            if (punchUp.sinceFirstPressed > 7.5 && punchUp.sinceFirstPressed <= 30)
-            {
+            if (hitAnimation(punchUp, attack, logo, punch)) {
                 punch.setPosition(logo.x, logo.y + -50);
-                attack.animation++;
-                if (attack.animation > 10) 
-                {
-                    punchUp.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('light attack finished');
-                }
-            }
-            else if (punchUp.sinceFirstPressed > 30)
-            {
-                punch.setPosition(logo.x, logo.y + -50);
-                attack.animation++;
-                if (attack.animation > 30)
-                {
-                    punchUp.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('heavy attack finished');
-                }
-
             }
         }
         else if (punchDown.isDown) 
@@ -235,35 +194,57 @@
         }
         else if (punchDown.isUp && punchDown.sinceFirstPressed > 0) 
         {
-            punchDown.sinceFirstPressed++;
-            if (punchDown.sinceFirstPressed > 7.5 && punchDown.sinceFirstPressed <= 30)
-            {
+            if (hitAnimation(punchDown, attack, logo, punch)) {
                 punch.setPosition(logo.x, logo.y + 50);
-                attack.animation++;
-                if (attack.animation > 10) 
-                {
-                    punchDown.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('light attack finished');
-                }
-            }
-            else if (punchDown.sinceFirstPressed > 30)
-            {
-                punch.setPosition(logo.x, logo.y + 50);
-                attack.animation++;
-                if (attack.animation > 30)
-                {
-                    punchDown.sinceFirstPressed = 0;
-                    attack.animation = 0;
-                    punch.setPosition(WIDTH + 100, HEIGHT + 100);
-                    console.log('heavy attack finished');
-                }
-
             }
         }
     }
-    </script>
+    function hitAnimation(punchKey, attack, attacker, punch) {
+       punchKey.sinceFirstPressed++;
+        if (punchKey.sinceFirstPressed > hit.lightAttack && punchKey.sinceFirstPressed <= hit.heavyAttack)
+        {
+            attack.animation++;
+            if (attack.animation > hit.lightAttack) 
+            {
+            	hitDamage(hit.lightDamage);
+                punchKey.sinceFirstPressed = 0;
+                attack.animation = 0;
+                punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                console.log('light attack finished');
+                return false;
+            }
+            return true;
+        }
+        else if (punchKey.sinceFirstPressed > hit.heavyAttack)
+        {
+            attack.animation++;
+            if (attack.animation > hit.heavyAttack)
+            {
+            	hitDamage(hit.heavyDamage);
+                punchKey.sinceFirstPressed = 0;
+                attack.animation = 0;
+                punch.setPosition(WIDTH + 100, HEIGHT + 100);
+                console.log('heavy attack finished');
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    function hitDamage(hitValue) {
+    	if (hit.detected > 0) 
+    	{
+    		enemy.health -= hitValue;
+    		if (enemy.health <= 0) 
+    		{
+    			enemy.setPosition(WIDTH/2, HEIGHT/2);
+                enemy.health = 100;
+    		}
+    	}
+    	hit.detected = 0;
+    	console.log(enemy.health);
+    }
 
+    </script>
 </body>
 </html>
