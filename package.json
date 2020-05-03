@@ -1,0 +1,32 @@
+{
+  "name": "fightingGame",
+  "version": "1.0.0",
+  "description": "* 2d game engine\r \t* physics\r \t- asset management\r \t- game loop\r \t\t- rendering\r \t\t- game logic\r \t\t\t- combos\r \t\t\t- weapons\r \t\t\t* jumping",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack-dev-server --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tillmonjesse/fighting-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tillmonjesse/fighting-game/issues"
+  },
+  "homepage": "https://github.com/tillmonjesse/fighting-game#readme",
+  "devDependencies": {
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "node-dependency-injection": "^2.6.3",
+    "phaser": "^3.22.0"
+  }
+}
