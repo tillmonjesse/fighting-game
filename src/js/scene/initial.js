@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import {WIDTH, HEIGHT} from '../constant.js';
+import {characterCreate} from '../factory/characterFactory.js';
 const scene = {
     preload, create, update
 };
@@ -30,7 +31,8 @@ function preload ()
     this.load.image('logo', '/assets/original.png');
     this.load.image('red', '/assets/red.png');
     this.load.image('ground', '/assets/ground.png');
-    this.load.image('enemy', '/assets/enemy.png')
+    this.load.image('enemy', '/assets/enemy.png');
+    this.load.image('no-asset', '/assets/noasset.jpg');
 }
 
 function create ()
@@ -57,19 +59,17 @@ function create ()
         scale: { start: 1, end: 0 },
         blendMode: 'ADD'
     });
-    logo = this.physics.add.image(0, 0, 'logo');
-    logo.setDragX(.95);
-    logo.setDamping(true);
-    logo.setMaxVelocity(200);
-    logo.setMass(5);
-    logo.setBounce(.8);
+    logo = characterCreate(this, {
+        asset: 'logo',
+        health: 100
+    });
 
-    enemy = this.physics.add.image(WIDTH/2, HEIGHT/2, 'enemy');
-    enemy.setDragX(.95);
-    enemy.setDamping(true);
-    enemy.setMaxVelocity(200);
-    enemy.setBounce(.8);
-    enemy.health = 100;
+    enemy = characterCreate(this, {
+        x: WIDTH/2,
+        y: HEIGHT/2,
+        asset: 'enemy',
+        health: 100
+    });
 
     punch = this.add.ellipse(WIDTH + 300, HEIGHT + 300, 100, 100, 0xff0000, 1);
 
@@ -87,7 +87,7 @@ function create ()
     this.physics.add.collider(logo, enemy);
     this.physics.add.overlap(punch, enemy, function (punch, enemy)
     {
-    	++hit.detected;
+    	++logo.hit.detected;
     });
 
     emitter.startFollow(logo);
@@ -124,7 +124,7 @@ function update ()
     }
     else if (punchRight.isUp && punchRight.sinceFirstPressed > 0) 
     {
-        if (hitAnimation(punchRight, attack, logo, punch)) {
+        if (logo.hitAnimation(punchRight, punch, enemy)) {
             punch.setPosition(logo.x + 50, logo.y);
         }
     }
@@ -134,7 +134,7 @@ function update ()
     }
     else if (punchLeft.isUp && punchLeft.sinceFirstPressed > 0) 
     {
-        if (hitAnimation(punchLeft, attack, logo, punch)) {
+        if (logo.hitAnimation(punchLeft, punch, enemy)) {
             punch.setPosition(logo.x + -50, logo.y);
         }
     }
@@ -144,7 +144,7 @@ function update ()
     }
     else if (punchUp.isUp && punchUp.sinceFirstPressed > 0) 
     {
-        if (hitAnimation(punchUp, attack, logo, punch)) {
+        if (logo.hitAnimation(punchUp, punch, enemy)) {
             punch.setPosition(logo.x, logo.y + -50);
         }
     }
@@ -154,53 +154,8 @@ function update ()
     }
     else if (punchDown.isUp && punchDown.sinceFirstPressed > 0) 
     {
-        if (hitAnimation(punchDown, attack, logo, punch)) {
+        if (logo.hitAnimation(punchDown, punch, enemy)) {
             punch.setPosition(logo.x, logo.y + 50);
         }
     }
-}
-function hitAnimation(punchKey, attack, attacker, punch) {
-   punchKey.sinceFirstPressed++;
-    if (punchKey.sinceFirstPressed > hit.lightAttack && punchKey.sinceFirstPressed <= hit.heavyAttack)
-    {
-        attack.animation++;
-        if (attack.animation > hit.lightAttack) 
-        {
-            hitDamage(hit.lightDamage);
-            punchKey.sinceFirstPressed = 0;
-            attack.animation = 0;
-            punch.setPosition(WIDTH + 100, HEIGHT + 100);
-            console.log('light attack finished');
-            return false;
-        }
-        return true;
-    }
-    else if (punchKey.sinceFirstPressed > hit.heavyAttack)
-    {
-        attack.animation++;
-        if (attack.animation > hit.heavyAttack)
-        {
-            hitDamage(hit.heavyDamage);
-            punchKey.sinceFirstPressed = 0;
-            attack.animation = 0;
-            punch.setPosition(WIDTH + 100, HEIGHT + 100);
-            console.log('heavy attack finished');
-            return false;
-        }
-        return true;
-    }
-    return false;
-}
-function hitDamage(hitValue) {
-    if (hit.detected > 0) 
-    {
-        enemy.health -= hitValue;
-        if (enemy.health <= 0) 
-        {
-            enemy.setPosition(WIDTH/2, HEIGHT/2);
-            enemy.health = 100;
-        }
-    }
-    hit.detected = 0;
-    console.log(enemy.health);
 }
