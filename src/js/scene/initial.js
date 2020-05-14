@@ -5,9 +5,9 @@ const scene = {
     preload, create, update
 };
 export default scene;
-let platforms;
-let logo;
-let enemy;
+let platform;
+let enemies;
+let allies;
 function preload ()
 {
 
@@ -21,62 +21,81 @@ function preload ()
 
 function create ()
 {
+    //create background
+    this.add.image(WIDTH/2, HEIGHT/2, 'sky');
+
+    //physics groups
+    allies = this.physics.add.group();
+    enemies = this.physics.add.group();
+    platform = this.physics.add.staticGroup();
+    platform.create(WIDTH/2, HEIGHT, 'ground');
+    this.physics.add.collider(platform, [enemies, allies]);
+    this.physics.add.collider(allies, enemies);
+
+    //player controls
+    var movement = this.input.keyboard.createCursorKeys();
     var punchDirection = {
         punchRight: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         punchLeft: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
         punchUp: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-        punchDown: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
-        
-    }
+        punchDown: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)    
+    };
     punchDirection.punchRight.sinceFirstPressed = 0;
     punchDirection.punchLeft.sinceFirstPressed = 0;
     punchDirection.punchUp.sinceFirstPressed = 0;
     punchDirection.punchDown.sinceFirstPressed = 0;
 
-    this.add.image(WIDTH/2, HEIGHT/2, 'sky');
-    platforms = this.physics.add.staticGroup();
-
-    platforms.create(WIDTH/2, HEIGHT, 'ground');
-
-    var particles = this.add.particles('red');
-
-    var emitter = particles.createEmitter({
-        speed: 100,
-        scale: { start: 1, end: 0 },
-        blendMode: 'ADD'
-    });
-    logo = characterCreate(
-        this, 
+    //create character
+    characterCreate(
+        this,
+        allies, 
         {
             asset: 'logo',
             health: 100
         },
-        this.input.keyboard.createCursorKeys(),
-        punchDirection
+        enemies,
+        punchDirection,
+        movement
     );
-
-    enemy = characterCreate(this, {
-        x: WIDTH/2,
-        y: HEIGHT/2,
-        asset: 'enemy',
-        health: 100
-    });
-
-    
-    logo.setCollideWorldBounds(true);
-    enemy.setCollideWorldBounds(true);
-    this.physics.add.collider(logo, platforms);
-    this.physics.add.collider(enemy, platforms);
-    this.physics.add.collider(logo, enemy);
-    this.physics.add.overlap(logo.punch, enemy, function (punch, enemy)
-    {
-    	++logo.hit.detected;
-    });
-
-    emitter.startFollow(logo);
+    characterCreate(
+        this, 
+        enemies, 
+        {
+            x: WIDTH/2,
+            y: HEIGHT/2,
+            asset: 'enemy',
+            health: 100
+        },
+        allies
+    );
+    characterCreate(
+        this,
+        enemies,
+        {
+            x: WIDTH/3,
+            y: HEIGHT/3,
+            asset: 'enemy',
+            health: 100
+        },
+        allies
+    );
 }
 function update ()
 {
-    logo.updateMovement();
-    logo.characterAttack(enemy);
+    var index;
+    var alliesArray = allies.getChildren();
+    for (index = 0; index < alliesArray.length; index++) 
+    {
+        var ally = alliesArray[index];
+        ally.updateMovement();
+        ally.characterAttack();
+    }
+    var enemiesArray = enemies.getChildren();
+    for (index = 0; index < enemiesArray.lenth; index++)
+    {
+        var enemy = enemiesArray[index];
+        enemy.updateMovement();
+        enemy.characterAttack();
+    }
+    
 }
