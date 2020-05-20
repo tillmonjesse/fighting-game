@@ -1,5 +1,28 @@
 import {WIDTH, HEIGHT} from '../constant.js';
-export const characterCreate = (scene, group, config, enemies, punchDirection, cursors) => {
+import {getAllies, getEnemies} from '../service/groups.js';
+const groupIdentifier = (config) => {
+	if (config.team === 'ally')
+	{
+		return getAllies()
+	}
+	else
+	{
+		return getEnemies()
+	}
+};
+const enemyIdentifier = (config) => {
+	if (config.team === 'ally') 
+	{
+		return getEnemies()
+	}
+	else
+	{
+		return getAllies()
+	}
+};
+export const characterCreate = (scene, config, punchDirection, cursors) => {
+	let group = groupIdentifier(config) 
+	let enemies = enemyIdentifier(config)
 	let character = group.create(
 		config.x || 0, 
 		config.y || 0,

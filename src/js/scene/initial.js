@@ -1,13 +1,11 @@
 import Phaser from 'phaser';
 import {WIDTH, HEIGHT} from '../constant.js';
 import {characterCreate} from '../factory/characterFactory.js';
+import {groupCreate, getAllies, getEnemies} from '../service/groups.js'
 const scene = {
     preload, create, update
 };
 export default scene;
-let platform;
-let enemies;
-let allies;
 function preload ()
 {
 
@@ -25,12 +23,7 @@ function create ()
     this.add.image(WIDTH/2, HEIGHT/2, 'sky');
 
     //physics groups
-    allies = this.physics.add.group();
-    enemies = this.physics.add.group();
-    platform = this.physics.add.staticGroup();
-    platform.create(WIDTH/2, HEIGHT, 'ground');
-    this.physics.add.collider(platform, [enemies, allies]);
-    this.physics.add.collider(allies, enemies);
+    groupCreate(this);
 
     //player controls
     var movement = this.input.keyboard.createCursorKeys();
@@ -47,50 +40,47 @@ function create ()
 
     //create character
     characterCreate(
-        this,
-        allies, 
+        this, 
         {
             asset: 'logo',
-            health: 100
+            health: 100,
+            team: 'ally'
         },
-        enemies,
         punchDirection,
         movement
     );
     characterCreate(
         this, 
-        enemies, 
         {
             x: WIDTH/2,
             y: HEIGHT/2,
             asset: 'enemy',
-            health: 100
-        },
-        allies
+            health: 100,
+            team: 'enemy'
+        }
     );
     characterCreate(
         this,
-        enemies,
         {
             x: WIDTH/3,
             y: HEIGHT/3,
             asset: 'enemy',
-            health: 100
-        },
-        allies
+            health: 100,
+            team: 'enemy'
+        }
     );
 }
 function update ()
 {
     var index;
-    var alliesArray = allies.getChildren();
+    var alliesArray = getAllies().getChildren();
     for (index = 0; index < alliesArray.length; index++) 
     {
         var ally = alliesArray[index];
         ally.updateMovement();
         ally.characterAttack();
     }
-    var enemiesArray = enemies.getChildren();
+    var enemiesArray = getEnemies().getChildren();
     for (index = 0; index < enemiesArray.lenth; index++)
     {
         var enemy = enemiesArray[index];
@@ -99,3 +89,7 @@ function update ()
     }
     
 }
+// make service for groups
+// import character factory won't permameters
+// will need a config property
+// update fuction will no longer var and will just get from service
