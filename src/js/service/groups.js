@@ -21,3 +21,23 @@ export const getEnemies = () => {
 export const getPlatform = () => {
 	return platform;
 };
+export const groupIdentifier = (config) => {
+	if (config.team === 'ally')
+	{
+		return getAllies()
+	}
+	else
+	{
+		return getEnemies()
+	}
+};
+export const enemyIdentifier = (config) => {
+	if (config.team === 'ally') 
+	{
+		return getEnemies()
+	}
+	else
+	{
+		return getAllies()
+	}
+};
