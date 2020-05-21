@@ -3,7 +3,7 @@ import {getAllies, getEnemies, groupIdentifier, enemyIdentifier} from '../servic
 export const characterCreate = (scene, config, punchDirection, cursors) => {
 	let group = groupIdentifier(config) 
 	let enemies = enemyIdentifier(config)
-	let character = group.create(
+	let character = groupIdentifier(config).create(
 		config.x || 0, 
 		config.y || 0,
 		config.asset || 'no-asset'

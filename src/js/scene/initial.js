@@ -89,7 +89,3 @@ function update ()
     }
     
 }
-// make service for groups
-// import character factory won't permameters
-// will need a config property
-// update fuction will no longer var and will just get from service

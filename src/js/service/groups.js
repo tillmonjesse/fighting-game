@@ -3,6 +3,8 @@ import {WIDTH, HEIGHT} from '../constant.js';
 let allies;
 let enemies;
 let platform;
+export const ALLY_TEAM_NAME = 'ally';
+export const ENEMY_TEAM_NAME = 'enemy';
 export const groupCreate = (scene) => {
 	allies = scene.physics.add.group();
 	enemies = scene.physics.add.group();
@@ -24,20 +26,20 @@ export const getPlatform = () => {
 export const groupIdentifier = (config) => {
 	if (config.team === 'ally')
 	{
-		return getAllies()
+		return getAllies();
 	}
 	else
 	{
-		return getEnemies()
+		return getEnemies();
 	}
 };
 export const enemyIdentifier = (config) => {
 	if (config.team === 'ally') 
 	{
-		return getEnemies()
+		return getEnemies();
 	}
 	else
 	{
-		return getAllies()
+		return getAllies();
 	}
 };
