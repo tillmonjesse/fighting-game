@@ -55,7 +55,8 @@ function create ()
             y: HEIGHT/2,
             asset: 'enemy',
             health: 100,
-            team: ENEMY_TEAM_NAME
+            team: ENEMY_TEAM_NAME,
+            ai: true
         }
     );
     characterCreate(
@@ -65,7 +66,8 @@ function create ()
             y: HEIGHT/3,
             asset: 'enemy',
             health: 100,
-            team: ENEMY_TEAM_NAME
+            team: ENEMY_TEAM_NAME,
+            ai: true
         }
     );
 }
@@ -80,11 +82,11 @@ function update ()
         ally.characterAttack();
     }
     var enemiesArray = getEnemies().getChildren();
-    for (index = 0; index < enemiesArray.lenth; index++)
+    for (index = 0; index < enemiesArray.length; index++)
     {
         var enemy = enemiesArray[index];
         enemy.updateMovement();
-        enemy.characterAttack();
+        //enemy.characterAttack();
     }
     
 }

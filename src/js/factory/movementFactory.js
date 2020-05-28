@@ -5,7 +5,44 @@ export const movementCreate = (scene, config) => {
 	}
 	else 
 	{
-		//return ai controls
-
+		return {
+			right: {
+				isDown: false
+			},
+			left: {
+				isDown: false
+			},
+			up: {
+				isDown: false
+			},
+			down: {
+				isDown: false
+			}
+		};
+	}
+}
+export const aiMovementCreate = () => {
+	return {
+		count: 0,
+		direction: 'right',
+		update: function(character) {
+			if (this.count === 0) 
+			{
+				if (Math.round(Math.random())) 
+				{
+					this.direction = 'right';
+				}
+				else
+				{
+					this.direction = 'left';
+				}
+			}
+			this.count++;
+			character.cursors[this.direction].isDown = this.count <= 30;
+			if (this.count > 30) 
+			{
+				this.count = 0;
+			}
+		}
 	}
 }
