@@ -24,7 +24,7 @@ export const getPlatform = () => {
 	return platform;
 };
 export const groupIdentifier = (config) => {
-	if (config.team === 'ally')
+	if (config.team === ALLY_TEAM_NAME)
 	{
 		return getAllies();
 	}
@@ -34,7 +34,7 @@ export const groupIdentifier = (config) => {
 	}
 };
 export const enemyIdentifier = (config) => {
-	if (config.team === 'ally') 
+	if (config.team === ALLY_TEAM_NAME) 
 	{
 		return getEnemies();
 	}
