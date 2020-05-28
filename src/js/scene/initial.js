@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import {WIDTH, HEIGHT} from '../constant.js';
 import {characterCreate} from '../factory/characterFactory.js';
-import {groupCreate, getAllies, getEnemies} from '../service/groups.js'
+import {groupCreate, getAllies, getEnemies, ALLY_TEAM_NAME, ENEMY_TEAM_NAME} from '../service/groups.js'
 const scene = {
     preload, create, update
 };
@@ -44,7 +44,7 @@ function create ()
         {
             asset: 'logo',
             health: 100,
-            team: 'ally'
+            team: ALLY_TEAM_NAME
         },
         punchDirection,
         movement
@@ -56,7 +56,7 @@ function create ()
             y: HEIGHT/2,
             asset: 'enemy',
             health: 100,
-            team: 'enemy'
+            team: ENEMY_TEAM_NAME
         }
     );
     characterCreate(
@@ -66,7 +66,7 @@ function create ()
             y: HEIGHT/3,
             asset: 'enemy',
             health: 100,
-            team: 'enemy'
+            team: ENEMY_TEAM_NAME
         }
     );
 }
