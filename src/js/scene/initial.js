@@ -26,7 +26,6 @@ function create ()
     groupCreate(this);
 
     //player controls
-    var movement = this.input.keyboard.createCursorKeys();
     var punchDirection = {
         punchRight: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         punchLeft: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
@@ -44,10 +43,10 @@ function create ()
         {
             asset: 'logo',
             health: 100,
-            team: ALLY_TEAM_NAME
+            team: ALLY_TEAM_NAME,
+            keyboardMovement: true
         },
-        punchDirection,
-        movement
+        punchDirection
     );
     characterCreate(
         this, 

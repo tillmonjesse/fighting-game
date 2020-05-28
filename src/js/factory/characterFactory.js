@@ -1,6 +1,7 @@
 import {WIDTH, HEIGHT} from '../constant.js';
 import {getAllies, getEnemies, groupIdentifier, enemyIdentifier} from '../service/groups.js';
-export const characterCreate = (scene, config, punchDirection, cursors) => {
+import {movementCreate} from './movementFactory.js';
+export const characterCreate = (scene, config, punchDirection) => {
 	let group = groupIdentifier(config) 
 	let enemies = enemyIdentifier(config)
 	let character = groupIdentifier(config).create(
@@ -36,7 +37,7 @@ export const characterCreate = (scene, config, punchDirection, cursors) => {
     character.punch.body.setAllowRotation(false);
     character.punch.body.setMaxVelocity(0);
     character.updateMovement = updateMovement;
-    character.cursors = cursors;
+    character.cursors = movementCreate(scene, config);
     character.punchDirection = punchDirection;
     scene.physics.add.overlap(character.punch, enemies, function (punch, enemy)
     {
