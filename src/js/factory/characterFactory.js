@@ -1,6 +1,9 @@
 import {WIDTH, HEIGHT} from '../constant.js';
-export const characterCreate = (scene, group, config, enemies, punchDirection, cursors) => {
-	let character = group.create(
+import {getAllies, getEnemies, groupIdentifier, enemyIdentifier} from '../service/groups.js';
+export const characterCreate = (scene, config, punchDirection, cursors) => {
+	let group = groupIdentifier(config) 
+	let enemies = enemyIdentifier(config)
+	let character = groupIdentifier(config).create(
 		config.x || 0, 
 		config.y || 0,
 		config.asset || 'no-asset'
