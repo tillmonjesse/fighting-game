@@ -25,18 +25,6 @@ function create ()
     //physics groups
     groupCreate(this);
 
-    //player controls
-    var punchDirection = {
-        punchRight: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-        punchLeft: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-        punchUp: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-        punchDown: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)    
-    };
-    punchDirection.punchRight.sinceFirstPressed = 0;
-    punchDirection.punchLeft.sinceFirstPressed = 0;
-    punchDirection.punchUp.sinceFirstPressed = 0;
-    punchDirection.punchDown.sinceFirstPressed = 0;
-
     //create character
     characterCreate(
         this, 
@@ -44,9 +32,9 @@ function create ()
             asset: 'logo',
             health: 100,
             team: ALLY_TEAM_NAME,
-            keyboardMovement: true
-        },
-        punchDirection
+            keyboardMovement: true,
+            punchKeys: true
+        }
     );
     characterCreate(
         this, 
@@ -86,7 +74,7 @@ function update ()
     {
         var enemy = enemiesArray[index];
         enemy.updateMovement();
-        //enemy.characterAttack();
+        enemy.characterAttack();
     }
     
 }

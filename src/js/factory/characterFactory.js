@@ -1,7 +1,8 @@
 import {WIDTH, HEIGHT} from '../constant.js';
 import {getAllies, getEnemies, groupIdentifier, enemyIdentifier} from '../service/groups.js';
 import {movementCreate, aiMovementCreate} from './movementFactory.js';
-export const characterCreate = (scene, config, punchDirection) => {
+import {attackCreate, aiAttackCreate} from './punchFactory.js';
+export const characterCreate = (scene, config) => {
 	let group = groupIdentifier(config) 
 	let enemies = enemyIdentifier(config)
 	let character = groupIdentifier(config).create(
@@ -41,8 +42,9 @@ export const characterCreate = (scene, config, punchDirection) => {
     if (config.ai) 
     {
     	character.ai = aiMovementCreate();
+    	character.aiAttack = aiAttackCreate();
     }
-    character.punchDirection = punchDirection;
+    character.punchKeys = attackCreate(scene, config);
     scene.physics.add.overlap(character.punch, enemies, function (punch, enemy)
     {
     	++character.hit.detected;  
@@ -104,43 +106,47 @@ function hitDamage(hitValue) {
     this.hit.enemies = [];    
 }
 function characterAttack() {
-	if (this.punchDirection.punchRight.isDown) 
+	if (this.aiAttack) 
+	{
+		this.aiAttack.update(this);
+	}
+	if (this.punchKeys.punchRight.isDown) 
     {
-        this.punchDirection.punchRight.sinceFirstPressed++;
+        this.punchKeys.punchRight.sinceFirstPressed++;
     }
-	else if (this.punchDirection.punchRight.isUp && this.punchDirection.punchRight.sinceFirstPressed > 0) 
+	else if (this.punchKeys.punchRight.isUp && this.punchKeys.punchRight.sinceFirstPressed > 0) 
     {
-        if (this.hitAnimation(this.punchDirection.punchRight)) {
+        if (this.hitAnimation(this.punchKeys.punchRight)) {
             this.punch.setPosition(this.x + 50, this.y);
         }
     }
-    else if (this.punchDirection.punchLeft.isDown)
+    else if (this.punchKeys.punchLeft.isDown)
      {
-        this.punchDirection.punchLeft.sinceFirstPressed++;
+        this.punchKeys.punchLeft.sinceFirstPressed++;
     }
-    else if (this.punchDirection.punchLeft.isUp && this.punchDirection.punchLeft.sinceFirstPressed > 0) 
+    else if (this.punchKeys.punchLeft.isUp && this.punchKeys.punchLeft.sinceFirstPressed > 0) 
     {
-        if (this.hitAnimation(this.punchDirection.punchLeft)) {
+        if (this.hitAnimation(this.punchKeys.punchLeft)) {
             this.punch.setPosition(this.x + -50, this.y);
         }
     }
-    else if (this.punchDirection.punchUp.isDown) 
+    else if (this.punchKeys.punchUp.isDown) 
     {
-        this.punchDirection.punchUp.sinceFirstPressed++;
+        this.punchKeys.punchUp.sinceFirstPressed++;
     }
-    else if (this.punchDirection.punchUp.isUp && this.punchDirection.punchUp.sinceFirstPressed > 0) 
+    else if (this.punchKeys.punchUp.isUp && this.punchKeys.punchUp.sinceFirstPressed > 0) 
     {
-        if (this.hitAnimation(this.punchDirection.punchUp)) {
+        if (this.hitAnimation(this.punchKeys.punchUp)) {
             this.punch.setPosition(this.x, this.y + -50);
         }
     }
-    else if (this.punchDirection.punchDown.isDown) 
+    else if (this.punchKeys.punchDown.isDown) 
     {
-        this.punchDirection.punchDown.sinceFirstPressed++;
+        this.punchKeys.punchDown.sinceFirstPressed++;
     }
-    else if (this.punchDirection.punchDown.isUp && this.punchDirection.punchDown.sinceFirstPressed > 0) 
+    else if (this.punchKeys.punchDown.isUp && this.punchKeys.punchDown.sinceFirstPressed > 0) 
     {
-        if (this.hitAnimation(this.punchDirection.punchDown)) {
+        if (this.hitAnimation(this.punchKeys.punchDown)) {
             this.punch.setPosition(this.x, this.y + 50);
         }
     }
