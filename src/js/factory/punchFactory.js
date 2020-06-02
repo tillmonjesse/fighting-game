@@ -50,15 +50,24 @@ export const aiAttackCreate = () => {
 		count: 0,
 		direction: 'punchRight',
 		possibleDirections: ['punchRight', 'punchLeft', 'punchUp', 'punchDown'],
+		keyDownDuration: 1,
 		update: function(character) {
 			if (this.count === 0) 
 			{
 				this.direction = this.possibleDirections[getRandomInt(0, this.possibleDirections.length)];
+				if (Math.round(Math.random())) 
+				{
+					this.keyDownDuration = character.hit.lightAttack;
+				}
+				else
+				{
+					this.keyDownDuration = character.hit.heavyAttack + 1;
+				}
 			}
 			this.count++;
-			character.punchKeys[this.direction].isDown = this.count <= 25;
+			character.punchKeys[this.direction].isDown = this.count <= this.keyDownDuration;
 			character.punchKeys[this.direction].isUp = !character.punchKeys[this.direction].isDown;
-			if (this.count > 30)
+			if (this.count > 90)
 			{
 				this.count = 0
 			}

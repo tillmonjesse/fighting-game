@@ -19,7 +19,7 @@ export const characterCreate = (scene, config) => {
     character.health = config.health || 100;
     character.hitAnimation = hitAnimation;
     character.hit = {
-    	lightAttack: 7.5,
+    	lightAttack: 8,
     	heavyAttack: 30,
     	lightDamage: 7.5,
     	heavyDamage: 30,
