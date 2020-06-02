@@ -36,3 +36,11 @@
  		- to have an object be created with a key push and use the collision of the other object will decide if that hits
  - health/ damage
  	- when an enemy's health is depleted they will blink for a second and then disappear
+
+## To do list
+
+- complete tools
+- unit testing
+- improve ai
+- screen overlay (pause, game over, start)
+- level design (scenes)
