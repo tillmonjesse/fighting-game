@@ -25,29 +25,16 @@ function create ()
     //physics groups
     groupCreate(this);
 
-    //player controls
-    var movement = this.input.keyboard.createCursorKeys();
-    var punchDirection = {
-        punchRight: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-        punchLeft: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-        punchUp: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-        punchDown: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)    
-    };
-    punchDirection.punchRight.sinceFirstPressed = 0;
-    punchDirection.punchLeft.sinceFirstPressed = 0;
-    punchDirection.punchUp.sinceFirstPressed = 0;
-    punchDirection.punchDown.sinceFirstPressed = 0;
-
     //create character
     characterCreate(
         this, 
         {
             asset: 'logo',
             health: 100,
-            team: ALLY_TEAM_NAME
-        },
-        punchDirection,
-        movement
+            team: ALLY_TEAM_NAME,
+            keyboardMovement: true,
+            punchKeys: true
+        }
     );
     characterCreate(
         this, 
@@ -56,7 +43,8 @@ function create ()
             y: HEIGHT/2,
             asset: 'enemy',
             health: 100,
-            team: ENEMY_TEAM_NAME
+            team: ENEMY_TEAM_NAME,
+            ai: true
         }
     );
     characterCreate(
@@ -66,7 +54,8 @@ function create ()
             y: HEIGHT/3,
             asset: 'enemy',
             health: 100,
-            team: ENEMY_TEAM_NAME
+            team: ENEMY_TEAM_NAME,
+            ai: true
         }
     );
 }
@@ -81,7 +70,7 @@ function update ()
         ally.characterAttack();
     }
     var enemiesArray = getEnemies().getChildren();
-    for (index = 0; index < enemiesArray.lenth; index++)
+    for (index = 0; index < enemiesArray.length; index++)
     {
         var enemy = enemiesArray[index];
         enemy.updateMovement();
