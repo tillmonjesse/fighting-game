@@ -40,6 +40,11 @@
 ## To do list
 
 - complete tools
+	- way of having tools for each scene
+		- scene list component 
+			- scene component to render the tools for each scene
+			- inside of each scene we need to get the groups to get the characters
+				- component groups and another for the individual characters 
 - unit testing
 - improve ai
 - screen overlay (pause, game over, start)
